@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root { --pea-purple: #7B1FA2; --pea-purple-light: #F3E5F5; --pea-purple-hover: #9C27B0; }
+    body { background-color: var(--pea-purple-light); font-family: 'Sarabun', sans-serif; padding: 15px; }
+    .text-pea { color: var(--pea-purple) !important; }
+    .bg-pea { background-color: var(--pea-purple) !important; color: white; }
+    .btn-pea { background-color: var(--pea-purple); color: white; border-radius: 6px; }
+    .btn-pea:hover { background-color: var(--pea-purple-hover); color: white; }
+    .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+    .card-header { border-radius: 12px 12px 0 0 !important; }
+    .timeline-container { height: 650px; overflow-y: auto; padding: 5px; }
+    .timeline-card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 12px; border-left: 6px solid #ccc; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: 0.3s;}
+    .timeline-card:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .border-yellow { border-color: #f1c40f !important; }
+    .border-purple { border-color: #9b59b6 !important; }
+    .border-green { border-color: #2ecc71 !important; }
+    .nav-tabs .nav-link { color: #555; font-weight: 500; border-radius: 8px 8px 0 0; }
+    .nav-tabs .nav-link.active { color: var(--pea-purple); font-weight: bold; border-bottom: 3px solid var(--pea-purple); }
+  </style>
+</head>
+<body>
+
+<div class="container-fluid" style="max-width: 1300px;">
+  <div class="text-center mb-4 mt-2">
+    <h2 class="fw-bold text-pea">⚡ ระบบจองใช้งานรถยนต์ Car pool กสฟ.(น2)</h2>
+    <p class="text-danger fw-bold">หากจองรถวันเดียวกัน (ไม่สนใจเวลา) ระบบจะบล็อกและไม่บันทึกข้อมูลเด็ดขาด</p>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-5 mb-4">
+      <div class="card h-100">
+        <div class="card-header bg-pea fw-bold fs-5">📝 ฟอร์มบันทึกข้อมูลการใช้รถ</div>
+        <div class="card-body">
+          <form id="bookingForm" class="row g-3">
+            <input type="hidden" id="rowId">
+            <div class="col-md-6">
+              <label class="form-label fw-bold small">ท่านต้องการ</label>
+              <select id="type" class="form-select" required>
+                <option value="ขอจองใช้งานรถยนต์">ขอจองใช้งานรถยนต์</option>
+                <option value="ลงรายงานการใช้รถยนต์">ลงรายงานการใช้รถยนต์</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold small text-pea">รถยนต์ Car pool</label>
+              <select id="car" class="form-select border-primary" required>
+                <option value="">-- เลือกรถยนต์ --</option>
+                <option value="🟡 7ขฆ 1370 กทม.">🟡 7ขฆ 1370 กทม.</option>
+                <option value="🟣 3ขน 8046 กทม.">🟣 3ขน 8046 กทม.</option>
+                <option value="🟢 4ขห 1270 กทม.">🟢 4ขห 1270 กทม.</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">ชื่อผู้จอง</label>
+              <input type="text" id="name" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">เบอร์โทรศัพท์</label>
+              <input type="text" id="phone" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label small">สังกัด / สถานที่ไปปฏิบัติงาน</label>
+              <div class="input-group">
+                <input type="text" id="dept" class="form-control" placeholder="สังกัด" required>
+                <input type="text" id="job" class="form-control" placeholder="สถานที่ไป" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-success fw-bold small">วันที่และเวลาเริ่มต้น</label>
+              <input type="datetime-local" id="start" class="form-control border-success" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-danger fw-bold small">วันที่และเวลาสิ้นสุด</label>
+              <input type="datetime-local" id="end" class="form-control border-danger" required>
+            </div>
+            <div class="col-12">
+              <div class="form-check alert alert-warning py-2 mb-0 d-flex align-items-center">
+                <input class="form-check-input ms-1 me-2" type="checkbox" id="check" required>
+                <label class="form-check-label text-danger fw-bold small">โปรดตรวจสอบคิวรถด้านขวาก่อนกดจอง</label>
+              </div>
+            </div>
+            <div class="col-12 d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-pea btn-lg fw-bold">บันทึกข้อมูล</button>
+              <button type="button" onclick="resetForm()" class="btn btn-light">ล้างค่าฟอร์ม</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card h-100">
+        <div class="card-header bg-white pb-0 border-bottom-0">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="fw-bold mb-0 text-pea">📋 รายการคิวรถ (ปัจจุบันและอนาคต)</h5>
+            <input type="text" id="search" class="form-control form-control-sm w-50" placeholder="🔍 ค้นหาชื่อ/สังกัด...">
+          </div>
+          <ul class="nav nav-tabs" id="carTabs" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-all">ทั้งหมด</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-car1">🟡 7ขฆ</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-car2">🟣 3ขน</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-car3">🟢 4ขห</a></li>
+          </ul>
+        </div>
+        <div class="card-body bg-light">
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-all"><div id="list-all" class="timeline-container"></div></div>
+            <div class="tab-pane fade" id="tab-car1"><div id="list-car1" class="timeline-container"></div></div>
+            <div class="tab-pane fade" id="tab-car2"><div id="list-car2" class="timeline-container"></div></div>
+            <div class="tab-pane fade" id="tab-car3"><div id="list-car3" class="timeline-container"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let allData = [];
+
+  document.addEventListener('DOMContentLoaded', function() {
+    loadData();
+    document.getElementById('bookingForm').addEventListener('submit', handleFormSubmit);
+    document.getElementById('search').addEventListener('input', filterData);
+  });
+
+  // 🛡️ ตัวแปลงวันที่เป็น 00:00:00 สำหรับหน้าจอ (ใช้เช็คแบบเหมาวัน)
+  function getDateOnlyTime(val) {
+    if (!val) return 0;
+    let str = String(val).trim().split('T')[0].split(' ')[0].split(',')[0];
+    let d;
+    if (str.includes('-')) {
+      let p = str.split('-');
+      d = new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+    } else if (str.includes('/')) {
+      let p = str.split('/');
+      if (p[0].length === 4) d = new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+      else d = new Date(parseInt(p[2]), parseInt(p[1])-1, parseInt(p[0]));
+    } else {
+      d = new Date(val);
+    }
+    if (isNaN(d.getTime())) return 0;
+    let y = d.getFullYear();
+    if (y > 2500) d.setFullYear(y - 543);
+    else if (y < 100) d.setFullYear(y + 2000);
+    
+    d.setHours(0, 0, 0, 0); // รีเซ็ตเวลาทิ้ง
+    return d.getTime();
+  }
+
+  function loadData() {
+    document.getElementById('list-all').innerHTML = '<div class="text-center mt-4">กำลังโหลดข้อมูล...</div>';
+    google.script.run.withSuccessHandler(function(res) {
+      allData = res;
+      renderTabs(res);
+    }).getData();
+  }
+
+  function getCarStyles(carName) {
+    if(carName.includes('7ขฆ')) return 'border-yellow';
+    if(carName.includes('3ขน')) return 'border-purple';
+    if(carName.includes('4ขห')) return 'border-green';
+    return 'border-secondary';
+  }
+
+  function renderTabs(data) {
+    let now = new Date().getTime();
+    
+    // โชว์เฉพาะคิวที่ยังไม่หมดเวลา (ใช้ข้อมูลเดิมที่มีเวลามาแสดง)
+    let activeData = data.filter(item => {
+      let eDate = new Date(item.end).getTime();
+      return !isNaN(eDate) && eDate >= now; 
+    });
+
+    activeData.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+
+    let dataCar1 = activeData.filter(d => d.car.includes('7ขฆ'));
+    let dataCar2 = activeData.filter(d => d.car.includes('3ขน'));
+    let dataCar3 = activeData.filter(d => d.car.includes('4ขห'));
+
+    buildList('list-all', activeData);
+    buildList('list-car1', dataCar1);
+    buildList('list-car2', dataCar2);
+    buildList('list-car3', dataCar3);
+  }
+
+  function buildList(containerId, dataArray) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    
+    if(dataArray.length === 0) {
+      container.innerHTML = '<div class="alert alert-light text-center mt-3 text-muted border">✨ ว่าง / ไม่มีคิวจองในระบบ</div>';
+      return;
+    }
+
+    dataArray.forEach(item => {
+      const bColor = getCarStyles(item.car);
+      let sDate = new Date(item.start);
+      let eDate = new Date(item.end);
+      let sText = isNaN(sDate.getTime()) ? item.start : sDate.toLocaleString('th-TH').slice(0, 16);
+      let eText = isNaN(eDate.getTime()) ? item.end : eDate.toLocaleString('th-TH').slice(0, 16);
+
+      const card = document.createElement('div');
+      card.className = `timeline-card ${bColor}`;
+      card.innerHTML = `
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <span class="fw-bold fs-6 text-dark">${item.car}</span>
+          <span class="badge bg-light text-dark border">${item.type}</span>
+        </div>
+        <div class="row mb-1">
+          <div class="col-sm-7">
+            <h5 class="fw-bold text-pea mb-1">👤 ${item.name}</h5>
+            <div class="text-muted small">🏢 ${item.dept} | 📞 ${item.phone}</div>
+            <div class="text-dark small mt-1">📍 <b>สถานที่:</b> ${item.job}</div>
+          </div>
+          <div class="col-sm-5 text-sm-end text-start mt-2 mt-sm-0 bg-light p-2 rounded">
+            <div class="text-success small fw-bold">🟢 เริ่ม: ${sText}</div>
+            <div class="text-danger small fw-bold mt-1">🔴 สิ้นสุด: ${eText}</div>
+          </div>
+        </div>
+        <div class="text-end mt-2">
+          <button class="btn btn-sm btn-outline-warning px-3 py-0" onclick="editData(${item.rowId})">แก้ไข</button>
+          <button class="btn btn-sm btn-outline-danger px-3 py-0 ms-1" onclick="deleteData(${item.rowId})">ลบ</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    const rowId = document.getElementById('rowId').value;
+    const car = document.getElementById('car').value;
+    const startInput = document.getElementById('start').value;
+    const endInput = document.getElementById('end').value;
+    
+    // 🛡️ ดึงเอาเฉพาะวันเดือนปีมาเช็คหน้าบ้าน (ตั้งเวลาเป็นเที่ยงคืน)
+    const newStart = getDateOnlyTime(startInput);
+    const newEnd = getDateOnlyTime(endInput);
+    
+    if (newEnd < newStart) {
+      Swal.fire('ข้อมูลไม่ถูกต้อง', 'วันที่สิ้นสุด ต้องไม่น้อยกว่าวันที่เริ่มต้น', 'warning');
+      return;
+    }
+
+    let isOverlapped = false;
+    
+    for (let i = 0; i < allData.length; i++) {
+      let item = allData[i];
+      if (rowId && String(item.rowId) === String(rowId)) continue;
+      
+      if (item.car === car) {
+        let existStart = getDateOnlyTime(item.start);
+        let existEnd = getDateOnlyTime(item.end);
+        
+        if (existStart === 0 || existEnd === 0) continue;
+        
+        // 🔴 กฎการทับซ้อนหน้าบ้าน (เช็คเฉพาะวันที่)
+        if (newStart <= existEnd && newEnd >= existStart) {
+          isOverlapped = true;
+          break;
+        }
+      }
+    }
+
+    // ⛔ เด้ง POP UP ทันทีเมื่อวันชนกัน และหยุดทำงาน (Return)
+    if (isOverlapped) {
+      Swal.fire({
+        title: 'ไม่สามารถจองได้!',
+        text: 'ไม่สามารถจองรถคันดังกล่าวซ้ำซ้อนกัน',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'รับทราบ'
+      });
+      return; 
+    }
+
+    const btn = e.submitter;
+    btn.disabled = true;
+    btn.innerHTML = "กำลังตรวจสอบและบันทึก...";
+
+    const obj = {
+      rowId: rowId,
+      type: document.getElementById('type').value,
+      car: car,
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      dept: document.getElementById('dept').value,
+      job: document.getElementById('job').value,
+      start: startInput, 
+      end: endInput,
+      check: document.getElementById('check').checked ? "ตรวจสอบแล้ว" : ""
+    };
+
+    google.script.run.withSuccessHandler(function(res) {
+      btn.disabled = false;
+      btn.innerHTML = "บันทึกข้อมูล";
+      
+      // 🔴 รับค่าจาก Server กรณีแอบหลุดไปได้ (เกราะชั้นที่ 2)
+      if(res.status === "error") {
+        Swal.fire({
+          title: 'ไม่สามารถจองได้!',
+          text: res.message,
+          icon: 'error',
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'ตกลง'
+        });
+        allData = res.data;
+        renderTabs(res.data);
+      } else {
+        Swal.fire({ title: 'สำเร็จ!', text: 'บันทึกข้อมูลการจองเรียบร้อย', icon: 'success', timer: 1500, showConfirmButton: false });
+        resetForm();
+        allData = res.data;
+        renderTabs(res.data); 
+      }
+    }).saveBooking(obj);
+  }
+
+  function editData(rowId) {
+    const item = allData.find(d => d.rowId === rowId);
+    document.getElementById('rowId').value = item.rowId;
+    document.getElementById('type').value = item.type;
+    document.getElementById('car').value = item.car;
+    document.getElementById('name').value = item.name;
+    document.getElementById('phone').value = item.phone;
+    document.getElementById('dept').value = item.dept;
+    document.getElementById('job').value = item.job;
+    
+    if(item.start) document.getElementById('start').value = item.start.substring(0, 16);
+    if(item.end) document.getElementById('end').value = item.end.substring(0, 16);
+    
+    document.getElementById('check').checked = true;
+    document.getElementById('bookingForm').scrollIntoView({behavior: 'smooth'});
+  }
+
+  function deleteData(rowId) {
+    Swal.fire({
+      title: 'ยืนยันการลบ?',
+      text: "ระบบจะลบข้อมูลนี้ทิ้งทันที",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'ลบข้อมูล'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({ title: 'กำลังลบ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        google.script.run.withSuccessHandler(function(res) {
+          Swal.close();
+          allData = res;
+          renderTabs(res);
+        }).deleteBooking(rowId);
+      }
+    });
+  }
+
+  function filterData() {
+    const val = this.value.toLowerCase();
+    const filtered = allData.filter(d => 
+      (d.name && d.name.toLowerCase().includes(val)) || 
+      (d.dept && d.dept.toLowerCase().includes(val)) || 
+      (d.job && d.job.toLowerCase().includes(val))
+    );
+    renderTabs(filtered);
+  }
+
+  function resetForm() {
+    document.getElementById('bookingForm').reset();
+    document.getElementById('rowId').value = '';
+  }
+</script>
+</body>
+</html>
