@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaturong Songpakde | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="background-radial"></div>
+    
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">JS<span>.</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="badge">Professional Engineer</span>
+                <h1>จาตุรงค์ ทรงภักดี</h1>
+                <h2 class="english-name">Jaturong Songpakde</h2>
+                <p class="role">พชง. 6 ผรผ.กสฟ.น2 | Provincial Electricity Authority</p>
+                <div class="hero-cta">
+                    <a href="#about" class="btn btn-primary">Discover More</a>
+                    <a href="#experience" class="btn btn-outline">My Achievements</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-wrapper glass">
+                    <img src="assets/profile.png" alt="Jaturong Songpakde">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h3 class="section-title">About Me</h3>
+            <div class="about-grid">
+                <div class="about-text glass">
+                    <p>พนักงานช่าง ระดับ 6 สังกัดแผนกวิศวกรรมและการตลาด (ผรผ.) กองบริการลูกค้ายุทธศาสตร์ (กสฟ.) การไฟฟ้าส่วนภูมิภาค เขต 2 (ภาคเหนือ) (น2)</p>
+                    <p>มีความชำนาญในด้านวิศวกรรมไฟฟ้าและระบบสื่อสาร พร้อมด้วยประสบการณ์การเป็นวิทยากรและผู้เชี่ยวชาญด้านเทคโนโลยีพลังงานสมัยใหม่ โดยเฉพาะระบบอัดประจุยานยนต์ไฟฟ้า (EV Charging)</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card glass">
+                        <h4>Expertise</h4>
+                        <p>EV Charging & Communication</p>
+                    </div>
+                    <div class="stat-card glass">
+                        <h4>Role</h4>
+                        <p>Technician Level 6 (PEA)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section bg-alt">
+        <div class="container">
+            <h3 class="section-title">Key Achievements</h3>
+            <div class="cards-container">
+                <div class="feature-card glass">
+                    <div class="icon-box"><i class="fas fa-satellite-dish"></i></div>
+                    <h4>Communication Systems Specialist</h4>
+                    <p>วิทยากรด้านสายสื่อสาร ให้ความรู้แก่บริษัทสายสื่อสารชั้นนำ พัฒนามาตรฐานการติดตั้งและบำรุงรักษา</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="icon-box"><i class="fas fa-charging-station"></i></div>
+                    <h4>EV Infrastructure Expert</h4>
+                    <p>ผู้เชี่ยวชาญด้าน EV HomeCharging และ EV Station สำหรับผู้ประกอบการ ควบคุมและดูแลการติดตั้งภายใต้มาตรฐาน กฟภ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="section">
+        <div class="container">
+            <h3 class="section-title">Education Journey</h3>
+            <div class="timeline">
+                <div class="timeline-item glass">
+                    <span class="year">Current</span>
+                    <h4>Master of Engineering (Computer Engineering & AI)</h4>
+                    <p>กำลังศึกษาปริญญาโท ด้านวิศวกรรมคอมพิวเตอร์และปัญญาประดิษฐ์ เพื่อประยุกต์ใช้เทคโนโลยี AI ในงานวิศวกรรมไฟฟ้า</p>
+                </div>
+                <div class="timeline-item glass">
+                    <span class="year">Graduate</span>
+                    <h4>Bachelor of Electrical Technology</h4>
+                    <p>ปริญญาตรี เทคโนโลยีไฟฟ้า ความรู้พื้นฐานที่แข็งแกร่งในระบบกำลังและไฟฟ้าอุตสาหกรรม</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Jaturong Songpakde. All rights reserved.</p>
+            <p>Built with ❤️ for Innovation</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
