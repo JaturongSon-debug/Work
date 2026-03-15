@@ -1,8 +1,11 @@
 # Portfolio Push Script
+$token = Read-Host -Prompt "Please enter your GitHub Personal Access Token"
+$repoUrl = "https://$token@github.com/JaturongSon-debug/Work.git"
 
-git init
-git remote add origin https://github.com/JaturongSon-debug/Work.git
-git add portfolio/
-git commit -m "Add modern one-page portfolio for Jaturong Songpakde"
-git branch -M main
+git branch -m main
+git remote set-url origin $repoUrl
+git add .
+git commit -m "Final professional portfolio commit"
 git push -u origin main
+
+Write-Host "Portfolio pushed successfully!" -ForegroundColor Green
